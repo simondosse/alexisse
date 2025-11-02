@@ -47,5 +47,57 @@
     <div class="wrap">
       <img class="big" src="grande.jpg" alt="Grande photo" />
     </div>
+    <!-- Audio de continuation -->
+    <audio id="celebrate" src="happy-birthday.wav" preload="auto"></audio>
+    <script>
+      (function () {
+        const key = 'persistAudio';
+        let data = null;
+        try { data = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (_) { data = null; }
+        if (!data) return;
+
+        const audio = document.getElementById('celebrate');
+        if (!audio) return;
+
+        try { if (data.src) audio.src = data.src; } catch (_) {}
+        try { if (typeof data.volume === 'number') audio.volume = data.volume; } catch (_) {}
+
+        function startPlayback() {
+          try {
+            if (isFinite(audio.duration) && audio.duration > 0 && data.startedAt) {
+              const elapsed = (Date.now() - data.startedAt) / 1000;
+              const dur = audio.duration;
+              const seekTo = Math.min(elapsed % dur, Math.max(0, dur - 0.25));
+              if (isFinite(seekTo) && seekTo >= 0) audio.currentTime = seekTo;
+            }
+          } catch (_) {}
+
+          const p = audio.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(() => showResumeButton());
+          }
+          try { sessionStorage.removeItem(key); } catch (_) {}
+        }
+
+        function showResumeButton() {
+          const btn = document.createElement('button');
+          btn.textContent = 'Reprendre la musique';
+          Object.assign(btn.style, {
+            position: 'fixed', left: '16px', bottom: '16px', right: 'auto', top: 'auto',
+            padding: '0.6rem 0.9rem', borderRadius: '9999px',
+            border: '1px solid rgba(255,255,255,0.35)',
+            background: 'rgba(0,0,0,0.55)', color: '#fff',
+            backdropFilter: 'blur(2px)', zIndex: 1001, cursor: 'pointer'
+          });
+          btn.addEventListener('click', () => {
+            audio.play().then(() => btn.remove()).catch(() => {});
+          });
+          document.body.appendChild(btn);
+        }
+
+        if (audio.readyState >= 1) startPlayback();
+        else audio.addEventListener('loadedmetadata', startPlayback, { once: true });
+      })();
+    </script>
   </body>
 </html>

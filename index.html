@@ -154,6 +154,14 @@
             } catch (_) {}
 
             spawnConfetti(160);
+            // Enregistre l'intention de continuer la musique sur la page suivante
+            try {
+              sessionStorage.setItem('persistAudio', JSON.stringify({
+                src: audio.currentSrc || audio.src,
+                startedAt: Date.now(),
+                volume: audio.volume
+              }));
+            } catch (_) {}
             const href = link.getAttribute('href');
             setTimeout(() => { window.location.href = href; }, 1800);
           });
