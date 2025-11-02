@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grande photo</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background: #000;
+        color: #fff;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      .wrap {
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      .big {
+        width: 100vw;
+        height: 100vh;
+        object-fit: contain; /* Voir toute la photo sans recadrage; changez en 'cover' si vous préférez remplir */
+        display: block;
+      }
+      .back {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        padding: 0.5rem 0.75rem;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.35);
+        border-radius: 8px;
+        backdrop-filter: blur(2px);
+        z-index: 1000; /* au-dessus de l'image */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Placez une image "grande" dans ce dossier et nommez-la: grande.jpg -->
+    <a class="back" href="alexisse.html" aria-label="Retour à la galerie">← Retour</a>
+    <div class="wrap">
+      <img class="big" src="grande.jpg" alt="Grande photo" />
+    </div>
+  </body>
+</html>
